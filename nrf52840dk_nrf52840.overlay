@@ -1,0 +1,61 @@
+
+/ {
+	zephyr,user {
+		io-channels = <&adc 1>, <&adc 2>;
+	};
+
+	aliases {
+		myserial = &uart1;
+	};
+};
+
+arduino_serial: &uart1 {
+	status = "okay";
+	compatible = "nordic,nrf-uart";
+	current-speed = <9600>;
+	pinctrl-0 = <&uart1_default>;
+	pinctrl-1 = <&uart1_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&adc {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	//subnode
+	channel@1 {
+		reg = <1>;
+		zephyr,gain = "ADC_GAIN_1"; //refer to the amplication applied to analog input signal
+		zephyr,reference = "ADC_REF_INTERNAL"; // max voltage that can be converted to digital value
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>; // duration for which ADC samples analog input before converting
+		zephyr,input-positive = <NRF_SAADC_AIN1>; /* P0.03 */ //which pin it ADC will sample
+		zephyr,resolution = <10>; // number of bits used to represent the converted signal
+		// zephyr,differential;
+	};
+
+	channel@2 {
+		reg = <2>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,input-positive = <NRF_SAADC_AIN2>; /* P0.04 */
+		zephyr,resolution = <10>;
+		// zephyr,differential;
+	};
+};
+
+
+&i2c0 {
+	clock-frequency = <I2C_BITRATE_STANDARD>;
+
+	ht16k33@70 {
+		compatible = "holtek,ht16k33";
+		reg = <0x70>;
+                /* Uncomment to use IRQ instead of polling: */
+		/* irq-gpios = <&gpio1 8 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>; */
+
+		keyscan {
+			compatible = "holtek,ht16k33-keyscan";
+		};
+	};
+};

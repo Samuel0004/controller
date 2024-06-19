@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "uuid.h": "c",
+        "my_service.h": "c",
+        "soc.h": "c",
+        "led.h": "c",
+        "hci.h": "c",
+        "gpio.h": "c",
+        "functions.h": "c",
+        "service.h": "c",
+        "uart.h": "c",
+        "functional": "c"
+    }
+}
